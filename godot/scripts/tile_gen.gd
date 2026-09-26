@@ -33,8 +33,11 @@ const MAX_FLOOD_TILES:int = 20000
 @export_range(0.0, 1.0, 0.01) var mine_density:float = 0.16
 
 var noise:FastNoiseLite = FastNoiseLite.new()
-## Only revealed tiles are stored; everything else is derived from the noise.
-var revealed:Dictionary[Vector2i, bool] = {}
+## Every tile the player has revealed, mapped to its adjacent mine count.
+## Hidden tiles are never stored; they are derived from the noise on demand.
+## Tiles are erased from the TileMapLayer when off screen, so this is what
+## keeps explored areas revealed when the player comes back to them.
+var revealed:Dictionary[Vector2i, int] = {}
 var _drawn_rect:Rect2i = Rect2i()
 
 func _ready() -> void:
@@ -91,9 +94,9 @@ func reveal(start:Vector2i) -> void:
 		var cell:Vector2i = stack.pop_back()
 		if revealed.has(cell):
 			continue
-		revealed[cell] = true
-		processed += 1
 		var count:int = count_adjacent_mines(cell)
+		revealed[cell] = count
+		processed += 1
 		if _drawn_rect.has_point(cell):
 			set_cell(cell, TILE_SOURCE_ID, MINESWEEPER_TILE_ATLAS[count])
 		if count == 0:
@@ -103,7 +106,7 @@ func reveal(start:Vector2i) -> void:
 					stack.push_back(next)
 
 func _draw_cell(cell:Vector2i) -> void:
-	var key:int = count_adjacent_mines(cell) if revealed.has(cell) else HIDDEN
+	var key:int = revealed.get(cell, HIDDEN)
 	set_cell(cell, TILE_SOURCE_ID, MINESWEEPER_TILE_ATLAS[key])
 
 ## Only the tiles around the camera exist in the TileMapLayer; tiles that
