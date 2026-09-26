@@ -1,3 +1,10 @@
 extends Node
 
-var money:int = 0
+var coins_gathered:int = 0
+var monsters_slain:int = 0
+var items_used:int = 0
+
+func reset_run() -> void:
+	coins_gathered = 0
+	monsters_slain = 0
+	items_used = 0
