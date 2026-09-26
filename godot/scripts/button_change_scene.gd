@@ -8,4 +8,5 @@ func _ready() -> void:
 	self.pressed.connect(_button_press)
 
 func _button_press() -> void:
+	GLOBAL.reset_run()
 	get_tree().change_scene_to_file(new_scene)
