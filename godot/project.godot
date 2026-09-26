@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="bitsweeper"
-run/main_scene="uid://d0do8mj3tjdwk"
+config/name="Bitsweeper"
+run/main_scene="uid://dhdijcy7x7n2w"
 config/features=PackedStringArray("4.7", "Forward Plus")
 config/icon="res://icon.svg"
 
