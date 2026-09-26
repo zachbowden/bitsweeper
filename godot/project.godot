@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="Bitsweeper"
+config/version="v1.0.0"
 run/main_scene="uid://dhdijcy7x7n2w"
 run/print_header=false
 config/features=PackedStringArray("4.7", "Forward Plus")
