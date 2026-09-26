@@ -12,7 +12,10 @@ config_version=5
 
 config/name="Bitsweeper"
 run/main_scene="uid://dhdijcy7x7n2w"
+run/print_header=false
 config/features=PackedStringArray("4.7", "Forward Plus")
+boot_splash/bg_color=Color(0, 0, 0, 1)
+boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [display]
@@ -20,8 +23,10 @@ config/icon="res://icon.svg"
 window/size/viewport_width=640
 window/size/viewport_height=480
 window/size/mode=2
+window/size/resizable=false
+window/size/sharp_corners=true
 window/stretch/mode="canvas_items"
-window/stretch/aspect="expand"
+window/stretch/aspect="keep_width"
 
 [physics]
 
