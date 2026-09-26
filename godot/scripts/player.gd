@@ -3,6 +3,9 @@ extends CharacterBody2D
 ## Movement speed in pixels per second.
 @export var speed:float = 75.0
 
+func _enter_tree() -> void:
+	add_to_group("player")
+
 func _physics_process(delta:float) -> void:
 	var direction:Vector2 = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
 	var motion:Vector2 = direction * speed * delta
