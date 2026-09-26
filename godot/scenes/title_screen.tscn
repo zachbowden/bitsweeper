@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://d0do8mj3tjdwk"]
+
+[ext_resource type="Script" uid="uid://bl3mvrbwdxut7" path="res://scripts/title_screen.gd" id="1_fgkus"]
+
+[node name="TitleScreen" type="Control" unique_id=434944328]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_fgkus")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1480590848]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1843081347]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1836986897]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="CenterContainer/VBoxContainer" unique_id=96928186]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Bit Sweeper"
+horizontal_alignment = 1
+
+[node name="By" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1561300553]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "By Scarlett, Isabel, Eric, and Zach"
+
+[node name="Start" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1626701586]
+layout_mode = 2
+text = "Start"
+
+[node name="Credits" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1801342592]
+layout_mode = 2
+text = "Credits"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/Credits" to="." method="_on_credits_pressed"]
