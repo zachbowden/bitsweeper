@@ -30,7 +30,7 @@ const DRAW_MARGIN:int = 2
 const MAX_FLOOD_TILES:int = 20000
 
 ## Fraction of tiles that are mines (0.0 - 1.0).
-@export_range(0.0, 1.0, 0.01) var mine_density:float = 0.16
+@export_range(0.0, 1.0, 0.01) var mine_density:float = 0.14
 
 var noise:FastNoiseLite = FastNoiseLite.new()
 ## Every tile the player has revealed, mapped to its adjacent mine count.
