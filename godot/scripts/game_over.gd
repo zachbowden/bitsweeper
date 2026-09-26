@@ -7,7 +7,7 @@ func _ready() -> void:
 		"Coins gathered: %d" % GLOBAL.coins_gathered
 
 	$ColorRect/CenterContainer/VBoxContainer/MonstersSlain.text = \
-		"Monsters slain: %d" % GLOAL.monsters_slain
+		"Monsters slain: %d" % GLOBAL.monsters_slain
 	
 	$ColorRect/CenterContainer/VBoxContainer/ItemsUsed.text = \
 		"Items used: %d" % GLOBAL.items_used
@@ -18,4 +18,4 @@ func _process(_delta: float) -> void:
 
 
 func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://title_screen.scn")
+	get_tree().change_scene_to_file("res://scenes/title_screen.scn")
