@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://cj00bsiq0s5bw"]
+
+[ext_resource type="TileSet" uid="uid://delteknqvak4j" path="res://assets/tileset/level_3/grass_tiles.tres" id="1_1pn4d"]
+[ext_resource type="Script" uid="uid://bk1qvf3t4ut68" path="res://scripts/tile_gen.gd" id="2_ah8om"]
+[ext_resource type="PackedScene" uid="uid://b46vdgrywwqg4" path="res://scenes/player.tscn" id="3_p6vls"]
+[ext_resource type="Script" uid="uid://clnvt0l7c2qyw" path="res://scripts/enemy_manager.gd" id="4_hhfj6"]
+
+[node name="Level3" type="Node2D" unique_id=84856214]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1574418395]
+tile_set = ExtResource("1_1pn4d")
+script = ExtResource("2_ah8om")
+door_scene = "uid://bbssbifei75gd"
+
+[node name="CharacterBody2D" parent="." unique_id=922264505 instance=ExtResource("3_p6vls")]
+
+[node name="enemy_manager" type="Node" parent="." unique_id=1580881046]
+script = ExtResource("4_hhfj6")
