@@ -50,6 +50,7 @@ func _ready() -> void:
 	# Draw above enemies (and tiles), which stay at the default z_index of 0.
 	z_index = 1
 	sprite = find_children("*", "AnimatedSprite2D", false)[0]
+	update_coins()
 	for display:Sprite2D in [%SLOT_1, %SLOT_2, %SLOT_3, %EQUIPT]:
 		var size:Vector2 = display.texture.get_size() if display.texture else Vector2(16, 16)
 		_display_sizes[display] = size * display.scale
@@ -114,6 +115,8 @@ func _move_along_axis(motion:Vector2) -> void:
 	if travel > 0.0:
 		global_position += motion.normalized() * travel
 
+func update_coins() -> void:
+	$coinCount.text=str(GLOBAL.coins_gathered)
 ## Plays the death sound and goes to the game over screen. The sound is
 ## played through GLOBAL, so it carries on over the scene change.
 func die() -> void:
