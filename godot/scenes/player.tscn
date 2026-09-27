@@ -3,12 +3,11 @@
 [ext_resource type="Script" uid="uid://cn6stp1lsexg1" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="SpriteFrames" uid="uid://bmh0mqw5rgfhq" path="res://assets/sprite_frames/player/player.tres" id="2_qhqgy"]
 [ext_resource type="TileSet" uid="uid://6yev4dnbw5to" path="res://assets/tileset/general/frame.tres" id="3_qhqgy"]
-[ext_resource type="Texture2D" uid="uid://4abq0imt2m2p" path="res://assets/coin1_16x16.png" id="4_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://bg33jbvjakbgk" path="res://icon.svg" id="4_qlg0r"]
+[ext_resource type="Texture2D" uid="uid://4abq0imt2m2p" path="res://assets/coin1_16x16.png" id="4_smehm"]
 [ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://baylmjq233cjk" path="res://assets/sprite_frames/player/portrait.png" id="6_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://800aam54rthu" path="res://assets/tileset/general/heart.png" id="7_fjrip"]
-[ext_resource type="Texture2D" uid="uid://bg33jbvjakbgk" path="res://icon.svg" id="4_qlg0r"]
-[ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
 size = Vector2(119.999985, 119.999985)
@@ -53,7 +52,7 @@ tile_set = ExtResource("3_qhqgy")
 z_index = 4
 position = Vector2(1130.0001, -1010.0001)
 scale = Vector2(8.125005, 8.125005)
-texture = ExtResource("4_qlg0r")
+texture = ExtResource("4_smehm")
 region_enabled = true
 region_rect = Rect2(0, 0, 16, 16)
 
@@ -96,6 +95,7 @@ z_index = 2
 position = Vector2(-140.00002, 920.0002)
 scale = Vector2(10, 10)
 texture = ExtResource("7_fjrip")
+
 [node name="EQUIPT" type="Sprite2D" parent="." unique_id=1938098159]
 unique_name_in_owner = true
 z_index = 1
