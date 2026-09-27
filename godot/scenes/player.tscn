@@ -8,6 +8,8 @@
 [ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://baylmjq233cjk" path="res://assets/sprite_frames/player/portrait.png" id="6_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://800aam54rthu" path="res://assets/tileset/general/heart.png" id="7_fjrip"]
+[ext_resource type="Texture2D" uid="uid://byy5fdkgo8ut" path="res://assets/tileset/rightcol.png" id="9_y4r1p"]
+[ext_resource type="Texture2D" uid="uid://b3xbavl4t0a5q" path="res://assets/tileset/general/leftcol.png" id="10_d2wvv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
 size = Vector2(119.999985, 119.999985)
@@ -143,3 +145,13 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("5_tuyoq")
 theme_override_font_sizes/font_size = 103
 text = "Level 1"
+
+[node name="Rightcol" type="Sprite2D" parent="." unique_id=1210017325]
+position = Vector2(1250.0002, -320.00006)
+scale = Vector2(16, 16)
+texture = ExtResource("9_y4r1p")
+
+[node name="Leftcol" type="Sprite2D" parent="." unique_id=1230239439]
+position = Vector2(-1270.0001, -320.00006)
+scale = Vector2(16, 16)
+texture = ExtResource("10_d2wvv")
