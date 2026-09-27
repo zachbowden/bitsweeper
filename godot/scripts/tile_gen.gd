@@ -57,6 +57,8 @@ var _drawn_rect:Rect2i = Rect2i()
 ## Child layer that draws flags and doors on top of the tiles beneath them.
 var _overlay_layer:TileMapLayer
 var _player:Node2D
+## The border drawn around the playfield (in the player scene).
+var _play_border:TileMapLayer
 var _leaving:bool = false
 
 func _enter_tree() -> void:
@@ -110,6 +112,8 @@ func _check_door() -> void:
 func _unhandled_input(event:InputEvent) -> void:
 	if not (event is InputEventMouseButton and event.pressed):
 		return
+	if not _is_mouse_in_play_area():
+		return
 	var cell:Vector2i = local_to_map(get_local_mouse_position())
 	if revealed.has(cell):
 		return
@@ -126,6 +130,16 @@ func _unhandled_input(event:InputEvent) -> void:
 		_:
 			return
 	get_viewport().set_input_as_handled()
+
+## False when the mouse is on the play border or outside it (over the
+## frame), so tiles can't be clicked through the HUD.
+func _is_mouse_in_play_area() -> bool:
+	if not is_instance_valid(_play_border):
+		_play_border = get_tree().get_first_node_in_group("play_border")
+		if _play_border == null:
+			return true
+	var cell:Vector2i = _play_border.local_to_map(_play_border.get_local_mouse_position())
+	return _play_border.get_used_rect().has_point(cell) and _play_border.get_cell_source_id(cell) == -1
 
 func toggle_flag(cell:Vector2i) -> void:
 	if revealed.has(cell):

@@ -6,7 +6,7 @@ extends CharacterBody2D
 var sprite:AnimatedSprite2D
 
 func _enter_tree() -> void:
-	add_to_group("player")
+	%PLAYER.add_to_group("player")
 
 func _ready() -> void:
 	# Draw above enemies (and tiles), which stay at the default z_index of 0.
