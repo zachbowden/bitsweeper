@@ -1,5 +1,13 @@
 extends Node2D
 
+const HIT_SOUNDS:Array[AudioStream] = [
+	preload("res://assets/sounds/hit_1.wav"),
+	preload("res://assets/sounds/hit_2.wav"),
+	preload("res://assets/sounds/hit_3.wav"),
+	preload("res://assets/sounds/hit_4.wav"),
+]
+const DEATH_SOUND:AudioStream = preload("res://assets/sounds/enemy_death.wav")
+
 ## Movement speed in pixels per second.
 @export var speed:float = 60.0
 
@@ -18,10 +26,19 @@ var _registered:bool = false
 func _enter_tree() -> void:
 	add_to_group("enemies")
 
+## Called when the player's weapon connects. Enemies have no health yet, so
+## every hit is fatal.
+func hit() -> void:
+	if is_queued_for_deletion():
+		return
+	GLOBAL.play_sound(HIT_SOUNDS.pick_random())
+	die()
+
 func die() -> void:
 	if is_queued_for_deletion():
 		return # Already killed this frame (e.g. by two hits at once).
 	GLOBAL.monsters_slain += 1
+	GLOBAL.play_sound(DEATH_SOUND)
 	queue_free()
 
 func _physics_process(delta:float) -> void:

@@ -80,3 +80,15 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_fonts/font = ExtResource("5_tuyoq")
 theme_override_font_sizes/font_size = 103
 text = "x100	"
+
+[node name="LEVEL" type="Label" parent="." unique_id=1719304628]
+unique_name_in_owner = true
+z_index = 1
+offset_left = -1440.0002
+offset_top = -1060.0001
+offset_right = -1134.0002
+offset_bottom = -956.0001
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_tuyoq")
+theme_override_font_sizes/font_size = 103
+text = "Level 1"

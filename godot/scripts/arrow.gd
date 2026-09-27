@@ -16,7 +16,7 @@ func _physics_process(delta:float) -> void:
 
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		if global_position.distance_to(enemy.global_position) < HIT_RADIUS:
-			enemy.die()
+			enemy.hit()
 			queue_free()
 			return
 

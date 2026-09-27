@@ -3,6 +3,9 @@ extends CharacterBody2D
 const WEAPON_TILESET:TileSet = preload("res://assets/tileset/weapons.tres")
 const ARROW_SCRIPT:GDScript = preload("res://scripts/arrow.gd")
 const ARROW_TEXTURE:Texture2D = preload("res://icon.svg")
+const MAP_MUSIC:AudioStream = preload("res://assets/sounds/bs_map.ogg")
+const DEATH_SOUND:AudioStream = preload("res://assets/sounds/player_death.wav")
+const GAME_OVER_SCENE:String = "res://scenes/game_over.tscn"
 ## Slot 3 is never stored in GLOBAL.inventory; it's always an unbreakable dagger.
 const DAGGER_SLOT:int = 3
 ## Weapon sprites point to the top right of their tile, i.e. at -45 degrees.
@@ -27,6 +30,7 @@ const WEAPONS:Dictionary = {
 @export var arrow_speed:float = 250.0
 
 var sprite:AnimatedSprite2D
+var _dead:bool = false
 var selected_slot:int = DAGGER_SLOT
 var _attack_cooldown:float = 0.0
 ## Extra rotation added to the held weapon while swinging.
@@ -51,6 +55,16 @@ func _ready() -> void:
 		_display_sizes[display] = size * display.scale
 	selected_slot = 1 if GLOBAL.inventory.has(1) else DAGGER_SLOT
 	_update_inventory_display()
+	%LEVEL.text = "Level %d" % GLOBAL.level
+	# Clicking a mine kills the player.
+	var tiles:Node = get_tree().get_first_node_in_group("tile_gen")
+	if tiles != null:
+		tiles.mine_triggered.connect(func(_cell:Vector2i) -> void: die())
+	var _audioplayer = AudioStreamPlayer2D.new()
+	_audioplayer.stream = MAP_MUSIC
+	_audioplayer.panning_strength = 0
+	_audioplayer.autoplay = true
+	add_child(_audioplayer)
 
 func _unhandled_input(event:InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -100,11 +114,19 @@ func _move_along_axis(motion:Vector2) -> void:
 	if travel > 0.0:
 		global_position += motion.normalized() * travel
 
+## Plays the death sound and goes to the game over screen. The sound is
+## played through GLOBAL, so it carries on over the scene change.
+func die() -> void:
+	if _dead:
+		return
+	_dead = true
+	GLOBAL.play_sound(DEATH_SOUND)
+	get_tree().change_scene_to_file.call_deferred(GAME_OVER_SCENE)
+
 # --- Inventory ---------------------------------------------------------------
 
 ## The item in `slot` as {"name", "durability"}, or an empty dictionary.
-## Slots 1-2 return the dictionary stored in GLOBAL.inventory itself, so
-## changing its durability changes the inventory.
+## Treat it as read-only; changes are saved with GLOBAL.inventory[slot] = ...
 func _get_item(slot:int) -> Dictionary:
 	if slot == DAGGER_SLOT:
 		return {"name": "dagger"}
@@ -147,14 +169,18 @@ func _weapon_texture(weapon_name:String) -> AtlasTexture:
 
 ## Uses up one durability; the item is destroyed when it reaches zero and
 ## the player falls back to the dagger.
+## The new value is written straight back into GLOBAL.inventory, so it
+## carries over to the next level.
 func _use_durability() -> void:
 	var item:Dictionary = _get_item(selected_slot)
 	if not item.has("durability"):
 		return
-	item["durability"] -= 1
-	if item["durability"] <= 0:
+	var durability:int = item["durability"] - 1
+	if durability <= 0:
 		GLOBAL.inventory.erase(selected_slot)
 		selected_slot = DAGGER_SLOT
+	else:
+		GLOBAL.inventory[selected_slot] = {"name": item["name"], "durability": durability}
 	_update_inventory_display()
 
 # --- Combat ------------------------------------------------------------------
@@ -201,7 +227,7 @@ func _melee(reach:float, arc:float) -> void:
 	for enemy in get_tree().get_nodes_in_group("enemies"):
 		var to_enemy:Vector2 = enemy.global_position - origin
 		if to_enemy.length() <= reach and absf(angle_difference(aim_angle, to_enemy.angle())) <= arc / 2:
-			enemy.die()
+			enemy.hit()
 
 	# Swing the held weapon across the arc and back to rest.
 	if _swing_tween:
