@@ -6,6 +6,8 @@ signal mine_triggered(cell:Vector2i)
 signal tiles_revealed(cells:Array[Vector2i])
 
 const TILE_SOURCE_ID:int = 0
+const FLAG_SOURCE_ID:int = 1
+const FLAG_ATLAS_COORDS:Vector2i = Vector2i(0,0)
 const HIDDEN:int = 0xA
 const MINESWEEPER_TILE_ATLAS:Dictionary = {
 	0:Vector2i(4,0),
@@ -40,7 +42,12 @@ var noise:FastNoiseLite = FastNoiseLite.new()
 ## Tiles are erased from the TileMapLayer when off screen, so this is what
 ## keeps explored areas revealed when the player comes back to them.
 var revealed:Dictionary[Vector2i, int] = {}
+## Hidden tiles the player has flagged. Flagged tiles can't be revealed until
+## the flag is removed, and flood reveals stop at them.
+var flagged:Dictionary[Vector2i, bool] = {}
 var _drawn_rect:Rect2i = Rect2i()
+## Child layer that draws flags on top of the undiscovered tiles beneath them.
+var _flag_layer:TileMapLayer
 
 func _enter_tree() -> void:
 	add_to_group("tile_gen")
@@ -54,6 +61,12 @@ func _ready() -> void:
 	noise.fractal_type = FastNoiseLite.FRACTAL_NONE
 	noise.seed = randi()
 
+	# The flag layer only draws; collision comes from the hidden tile below it.
+	_flag_layer = TileMapLayer.new()
+	_flag_layer.tile_set = tile_set
+	_flag_layer.collision_enabled = false
+	add_child(_flag_layer)
+
 	clear()
 	for x in range(-SPAWN_SAFE_RADIUS, SPAWN_SAFE_RADIUS + 1):
 		for y in range(-SPAWN_SAFE_RADIUS, SPAWN_SAFE_RADIUS + 1):
@@ -64,15 +77,34 @@ func _process(_delta:float) -> void:
 	_update_visible_tiles()
 
 func _unhandled_input(event:InputEvent) -> void:
-	if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
-		var cell:Vector2i = local_to_map(get_local_mouse_position())
-		if revealed.has(cell):
+	if not (event is InputEventMouseButton and event.pressed):
+		return
+	var cell:Vector2i = local_to_map(get_local_mouse_position())
+	if revealed.has(cell):
+		return
+	match event.button_index:
+		MOUSE_BUTTON_LEFT:
+			if flagged.has(cell):
+				return
+			if is_mine(cell):
+				mine_triggered.emit(cell)
+			else:
+				reveal(cell)
+		MOUSE_BUTTON_RIGHT:
+			toggle_flag(cell)
+		_:
 			return
-		if is_mine(cell):
-			mine_triggered.emit(cell)
-		else:
-			reveal(cell)
-		get_viewport().set_input_as_handled()
+	get_viewport().set_input_as_handled()
+
+func toggle_flag(cell:Vector2i) -> void:
+	if revealed.has(cell):
+		return
+	if flagged.has(cell):
+		flagged.erase(cell)
+	else:
+		flagged[cell] = true
+	if _drawn_rect.has_point(cell):
+		_draw_cell(cell)
 
 func is_mine(cell:Vector2i) -> bool:
 	if absi(cell.x) <= SPAWN_SAFE_RADIUS and absi(cell.y) <= SPAWN_SAFE_RADIUS:
@@ -91,7 +123,7 @@ func count_adjacent_mines(cell:Vector2i) -> int:
 ## Reveals a tile; if it has no adjacent mines, flood-reveals the connected
 ## empty area and its numbered border, like classic minesweeper.
 func reveal(start:Vector2i) -> void:
-	if revealed.has(start) or is_mine(start):
+	if revealed.has(start) or flagged.has(start) or is_mine(start):
 		return
 	var stack:Array[Vector2i] = [start]
 	var opened:Array[Vector2i] = []
@@ -107,13 +139,17 @@ func reveal(start:Vector2i) -> void:
 		if count == 0:
 			for offset in NEIGHBOURS:
 				var next:Vector2i = cell + offset
-				if not revealed.has(next):
+				if not revealed.has(next) and not flagged.has(next):
 					stack.push_back(next)
 	tiles_revealed.emit(opened)
 
 func _draw_cell(cell:Vector2i) -> void:
 	var key:int = revealed.get(cell, HIDDEN)
 	set_cell(cell, TILE_SOURCE_ID, MINESWEEPER_TILE_ATLAS[key])
+	if flagged.has(cell):
+		_flag_layer.set_cell(cell, FLAG_SOURCE_ID, FLAG_ATLAS_COORDS)
+	else:
+		_flag_layer.erase_cell(cell)
 
 ## Only the tiles around the camera exist in the TileMapLayer; tiles that
 ## scroll off screen are erased and regenerated deterministically on return.
@@ -130,6 +166,7 @@ func _update_visible_tiles() -> void:
 			var cell:Vector2i = Vector2i(x, y)
 			if not new_rect.has_point(cell):
 				erase_cell(cell)
+				_flag_layer.erase_cell(cell)
 	for x in range(new_rect.position.x, new_rect.end.x):
 		for y in range(new_rect.position.y, new_rect.end.y):
 			var cell:Vector2i = Vector2i(x, y)
