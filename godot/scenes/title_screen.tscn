@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cf2wnj1vev2xn" path="res://scripts/set_version.gd" id="2_mgrm8"]
 [ext_resource type="Script" uid="uid://srhgihum0q35" path="res://scripts/button_change_scene.gd" id="3_dc4i4"]
 [ext_resource type="AudioStream" uid="uid://bq3c6kic03guj" path="res://assets/sounds/bs_title.ogg" id="4_mgrm8"]
+[ext_resource type="Texture2D" uid="uid://dhkj657j1eiss" path="res://assets/tileset/level_1/num_tiles_1.png" id="5_dc4i4"]
 
 [sub_resource type="GDScript" id="GDScript_mkqna"]
 script/source = "extends Control
@@ -34,8 +35,9 @@ offset_bottom = 480.0
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1843081347]
 layout_mode = 0
+offset_top = -90.0
 offset_right = 640.0
-offset_bottom = 480.0
+offset_bottom = 390.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1836986897]
 layout_mode = 2
@@ -85,3 +87,10 @@ new_scene = "uid://dtdaqgag4ni1w"
 stream = ExtResource("4_mgrm8")
 autoplay = true
 panning_strength = 0.0
+
+[node name="Bomb" type="Sprite2D" parent="." unique_id=1812670550]
+position = Vector2(320.00003, 328)
+scale = Vector2(10, 10)
+texture = ExtResource("5_dc4i4")
+region_enabled = true
+region_rect = Rect2(34, 2, 12, 12)
