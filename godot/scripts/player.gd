@@ -289,7 +289,7 @@ func _fire_arrow(max_distance:float) -> void:
 	var aim:Vector2 = _aim_direction()
 	var arrow = ARROW_SCRIPT.new()
 	arrow.texture = ARROW_TEXTURE # Placeholder until there's an arrow sprite.
-	arrow.z_index = 1
+	arrow.z_index = 0
 	arrow.velocity = aim * arrow_speed
 	arrow.max_distance = max_distance
 	# Added to the level, not the player, so it doesn't move with the player.
