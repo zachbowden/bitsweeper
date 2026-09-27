@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://b46vdgrywwqg4"]
+
+[ext_resource type="Script" uid="uid://cn6stp1lsexg1" path="res://scripts/player.gd" id="1_g2els"]
+[ext_resource type="SpriteFrames" uid="uid://bmh0mqw5rgfhq" path="res://assets/sprite_frames/player/player.tres" id="2_qhqgy"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
+size = Vector2(119.999985, 119.999985)
+
+[node name="CharacterBody2D" type="CharacterBody2D" unique_id=922264505]
+scale = Vector2(0.09999999, 0.09999999)
+script = ExtResource("1_g2els")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1782240614]
+position = Vector2(-1.1920931e-06, 1.1920931e-06)
+scale = Vector2(1.0000002, 1.0000002)
+shape = SubResource("RectangleShape2D_uurhq")
+
+[node name="PLAYER" type="AnimatedSprite2D" parent="." unique_id=2137854592]
+unique_name_in_owner = true
+scale = Vector2(9, 9)
+sprite_frames = ExtResource("2_qhqgy")
+animation = &"walk_down"
+frame_progress = 0.48929286
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1178061732]
+scale = Vector2(10.000002, 10.000002)
+zoom = Vector2(2, 2)
+
+[node name="WEAPON" type="Sprite2D" parent="." unique_id=80248004]
+unique_name_in_owner = true
