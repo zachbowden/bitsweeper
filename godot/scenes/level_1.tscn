@@ -10,7 +10,7 @@
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1574418395]
 tile_set = ExtResource("1_4nkto")
 script = ExtResource("2_fcfvj")
-door_scene = "uid://bbssbifei75gd"
+door_scene = "uid://r1np6b1mxkg3"
 
 [node name="CharacterBody2D" parent="." unique_id=922264505 instance=ExtResource("3_5xbjy")]
 
