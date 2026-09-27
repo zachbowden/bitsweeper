@@ -1,7 +1,7 @@
-[gd_scene format=3 uid="uid://cd427sdqqv0ft"]
+[gd_scene format=3 uid="uid://cs2orbjvy7s1o"]
 
-[ext_resource type="SpriteFrames" path="res://assets/sprite_frames/enemies/test_enemy.tres" id="1_7p1mj"]
-[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_md0e3"]
+[ext_resource type="SpriteFrames" uid="uid://p6hhvsmuuxvh" path="res://assets/sprite_frames/enemies/test_enemy.tres" id="1_7p1mj"]
+[ext_resource type="Script" uid="uid://djl5irqyhi6d7" path="res://scripts/enemy.gd" id="1_md0e3"]
 
 [node name="Enemy" type="Node2D" unique_id=1521389260]
 script = ExtResource("1_md0e3")

@@ -2,6 +2,8 @@ extends TileMapLayer
 
 ## Emitted when the player clicks a hidden tile that contains a mine.
 signal mine_triggered(cell:Vector2i)
+## Emitted after a single reveal() opens tiles, with every tile it opened.
+signal tiles_revealed(cells:Array[Vector2i])
 
 const TILE_SOURCE_ID:int = 0
 const HIDDEN:int = 0xA
@@ -39,6 +41,9 @@ var noise:FastNoiseLite = FastNoiseLite.new()
 ## keeps explored areas revealed when the player comes back to them.
 var revealed:Dictionary[Vector2i, int] = {}
 var _drawn_rect:Rect2i = Rect2i()
+
+func _enter_tree() -> void:
+	add_to_group("tile_gen")
 
 func _ready() -> void:
 	# Value noise sampled on integer lattice points at frequency 1 returns the
@@ -89,14 +94,14 @@ func reveal(start:Vector2i) -> void:
 	if revealed.has(start) or is_mine(start):
 		return
 	var stack:Array[Vector2i] = [start]
-	var processed:int = 0
-	while not stack.is_empty() and processed < MAX_FLOOD_TILES:
+	var opened:Array[Vector2i] = []
+	while not stack.is_empty() and opened.size() < MAX_FLOOD_TILES:
 		var cell:Vector2i = stack.pop_back()
 		if revealed.has(cell):
 			continue
 		var count:int = count_adjacent_mines(cell)
 		revealed[cell] = count
-		processed += 1
+		opened.append(cell)
 		if _drawn_rect.has_point(cell):
 			set_cell(cell, TILE_SOURCE_ID, MINESWEEPER_TILE_ATLAS[count])
 		if count == 0:
@@ -104,6 +109,7 @@ func reveal(start:Vector2i) -> void:
 				var next:Vector2i = cell + offset
 				if not revealed.has(next):
 					stack.push_back(next)
+	tiles_revealed.emit(opened)
 
 func _draw_cell(cell:Vector2i) -> void:
 	var key:int = revealed.get(cell, HIDDEN)
