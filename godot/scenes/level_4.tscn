@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://bpt4j5c8mk6qh"]
+
+[ext_resource type="TileSet" uid="uid://d4bxyeircbj8r" path="res://assets/tileset/level_4/winter_tiles.tres" id="1_rbbjd"]
+[ext_resource type="Script" uid="uid://bk1qvf3t4ut68" path="res://scripts/tile_gen.gd" id="2_wom6i"]
+[ext_resource type="PackedScene" uid="uid://b46vdgrywwqg4" path="res://scenes/player.tscn" id="3_ycko3"]
+[ext_resource type="Script" uid="uid://clnvt0l7c2qyw" path="res://scripts/enemy_manager.gd" id="4_x7blo"]
+
+[node name="Level3" type="Node2D" unique_id=84856214]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1574418395]
+tile_set = ExtResource("1_rbbjd")
+script = ExtResource("2_wom6i")
+door_scene = "uid://bbssbifei75gd"
+
+[node name="CharacterBody2D" parent="." unique_id=922264505 instance=ExtResource("3_ycko3")]
+
+[node name="enemy_manager" type="Node" parent="." unique_id=1580881046]
+script = ExtResource("4_x7blo")

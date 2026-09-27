@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://r1np6b1mxkg3"]
 
-[ext_resource type="TileSet" uid="uid://bekm0j0ar5k2v" path="res://assets/tileset/level_2/grid.tres" id="1_eqxsl"]
+[ext_resource type="TileSet" uid="uid://bekm0j0ar5k2v" path="res://assets/tileset/level_2/beach_tiles.tres" id="1_eqxsl"]
 [ext_resource type="Script" uid="uid://bk1qvf3t4ut68" path="res://scripts/tile_gen.gd" id="2_b4j7a"]
 [ext_resource type="PackedScene" uid="uid://b46vdgrywwqg4" path="res://scenes/player.tscn" id="3_wo48x"]
 [ext_resource type="Script" uid="uid://clnvt0l7c2qyw" path="res://scripts/enemy_manager.gd" id="4_y0kc7"]

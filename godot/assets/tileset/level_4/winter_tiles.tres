@@ -1,0 +1,54 @@
+[gd_resource type="TileSet" format=3 uid="uid://d4bxyeircbj8r"]
+
+[ext_resource type="Texture2D" uid="uid://2rvbwabs1qdf" path="res://assets/tileset/level_4/winter_tiles.png" id="1_j0225"]
+[ext_resource type="Texture2D" uid="uid://b3gxqpy8dhmo0" path="res://assets/tileset/general/num_tiles_2.png" id="2_w86dj"]
+[ext_resource type="Texture2D" uid="uid://bavb1hia4mrfc" path="res://assets/tileset/general/door.png" id="3_vhg2h"]
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_sk3si"]
+texture = ExtResource("1_j0225")
+0:0/0 = 0
+1:0/0 = 0
+1:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8r85w"]
+texture = ExtResource("2_w86dj")
+0:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5umyp"]
+texture = ExtResource("3_vhg2h")
+0:0/0 = 0
+
+[resource]
+physics_layer_0/collision_layer = 1
+sources/0 = SubResource("TileSetAtlasSource_sk3si")
+sources/1 = SubResource("TileSetAtlasSource_8r85w")
+sources/3 = SubResource("TileSetAtlasSource_5umyp")
