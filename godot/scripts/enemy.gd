@@ -13,6 +13,7 @@ var _next_cell:Vector2i
 var _target:Vector2
 var _moving:bool = false
 var _registered:bool = false
+@onready var sprite:AnimatedSprite2D = find_children("*", "AnimatedSprite2D", false)[0]
 
 func _physics_process(delta:float) -> void:
 	if manager == null:
@@ -30,12 +31,15 @@ func _physics_process(delta:float) -> void:
 		if not _moving:
 			var next:Vector2i = manager.next_step(_cell, self)
 			if next == _cell:
-				return # No path, already there, or every useful sub-cell is taken.
+				# No path, already there, or every useful sub-cell is taken.
+				sprite.play("idle")
+				return
 			# Hold both sub-cells until arrival so nobody walks into the one we're leaving.
 			manager.claim(next, self)
 			_next_cell = next
 			_target = manager.sub_cell_to_world(next)
 			_moving = true
+			_animate(_target - global_position)
 		var distance:float = global_position.distance_to(_target)
 		if distance <= step:
 			global_position = _target
@@ -46,6 +50,30 @@ func _physics_process(delta:float) -> void:
 		else:
 			global_position = global_position.move_toward(_target, step)
 			step = 0.0
+
+## Same animations as the player: walk_right faces right, so it's mirrored for
+## moving left. Diagonal steps keep the current walk if it matches either
+## direction, so zig-zagging along the sub-cell grid doesn't flicker between
+## animations.
+func _animate(direction:Vector2) -> void:
+	var diagonal:bool = not is_zero_approx(direction.x) and not is_zero_approx(direction.y)
+	if diagonal:
+		match sprite.animation:
+			&"walk_down":
+				if direction.y > 0.0:
+					return
+			&"walk_up":
+				if direction.y < 0.0:
+					return
+			&"walk_right":
+				if (direction.x < 0.0) == sprite.flip_h:
+					return
+	if absf(direction.x) >= absf(direction.y):
+		sprite.play("walk_right")
+		sprite.flip_h = direction.x < 0.0
+	else:
+		sprite.play("walk_down" if direction.y > 0.0 else "walk_up")
+		sprite.flip_h = false
 
 func _exit_tree() -> void:
 	if _registered and is_instance_valid(manager):
