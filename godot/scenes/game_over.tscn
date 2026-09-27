@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://bbssbifei75gd"]
+
+[ext_resource type="Script" uid="uid://bug8ov45cbha5" path="res://scripts/game_over.gd" id="1_xeevv"]
+
+[node name="Control" type="Control" unique_id=229386752]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xeevv")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=56070025]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect" unique_id=683010182]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer" unique_id=2033503402]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="GameOverLabel" type="RichTextLabel" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=1956880227]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Game over!"
+fit_content = true
+horizontal_alignment = 1
+
+[node name="CoinsGathered" type="RichTextLabel" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=529709193]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Coins gathered:"
+fit_content = true
+
+[node name="MonstersSlain" type="RichTextLabel" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=796867286]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Monsters slain:"
+fit_content = true
+
+[node name="ItemsUsed" type="RichTextLabel" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=1883408570]
+layout_mode = 2
+theme_override_colors/default_color = Color(0, 0, 0, 1)
+text = "Items used: "
+fit_content = true
+
+[node name="Button" type="Button" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=1704078681]
+layout_mode = 2
+text = "Main Menu"
+
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]

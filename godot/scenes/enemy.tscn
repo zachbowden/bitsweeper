@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://cd427sdqqv0ft"]
+
+[ext_resource type="SpriteFrames" path="res://assets/sprite_frames/enemies/test_enemy.tres" id="1_7p1mj"]
+[ext_resource type="Script" path="res://scripts/enemy.gd" id="1_md0e3"]
+
+[node name="Enemy" type="Node2D" unique_id=1521389260]
+script = ExtResource("1_md0e3")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=689075198]
+scale = Vector2(0.1, 0.1)
+sprite_frames = ExtResource("1_7p1mj")
