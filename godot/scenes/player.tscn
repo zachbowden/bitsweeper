@@ -7,6 +7,8 @@
 [ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://baylmjq233cjk" path="res://assets/sprite_frames/player/portrait.png" id="6_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://800aam54rthu" path="res://assets/tileset/general/heart.png" id="7_fjrip"]
+[ext_resource type="Texture2D" uid="uid://bg33jbvjakbgk" path="res://icon.svg" id="4_qlg0r"]
+[ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
 size = Vector2(119.999985, 119.999985)
@@ -28,11 +30,12 @@ sprite_frames = ExtResource("2_qhqgy")
 animation = &"walk_down"
 frame_progress = 0.48929286
 
+[node name="WEAPON" type="Sprite2D" parent="PLAYER" unique_id=80248004]
+unique_name_in_owner = true
+scale = Vector2(0.11111111, 0.11111111)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1178061732]
 zoom = Vector2(2, 2)
-
-[node name="WEAPON" type="Sprite2D" parent="." unique_id=80248004]
-unique_name_in_owner = true
 
 [node name="frame" type="TileMapLayer" parent="." unique_id=2015913525]
 position = Vector2(20, -20)
@@ -93,3 +96,50 @@ z_index = 2
 position = Vector2(-140.00002, 920.0002)
 scale = Vector2(10, 10)
 texture = ExtResource("7_fjrip")
+[node name="EQUIPT" type="Sprite2D" parent="." unique_id=1938098159]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(400.00006, 910.0001)
+texture = ExtResource("4_qlg0r")
+
+[node name="SLOT_1" type="Sprite2D" parent="." unique_id=1593286209]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(1210.0002, 420.00006)
+texture = ExtResource("4_qlg0r")
+
+[node name="SLOT_2" type="Sprite2D" parent="." unique_id=870229524]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(1210.0002, 660.0001)
+texture = ExtResource("4_qlg0r")
+
+[node name="SLOT_3" type="Sprite2D" parent="." unique_id=810603234]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(1210.0001, 900.0002)
+texture = ExtResource("4_qlg0r")
+
+[node name="DURABILITY" type="Label" parent="." unique_id=382540381]
+unique_name_in_owner = true
+z_index = 1
+offset_left = 520.00006
+offset_top = 860.0001
+offset_right = 746.00006
+offset_bottom = 964.0001
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_tuyoq")
+theme_override_font_sizes/font_size = 103
+text = "x100	"
+
+[node name="LEVEL" type="Label" parent="." unique_id=1719304628]
+unique_name_in_owner = true
+z_index = 1
+offset_left = -1440.0002
+offset_top = -1060.0001
+offset_right = -1134.0002
+offset_bottom = -956.0001
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_tuyoq")
+theme_override_font_sizes/font_size = 103
+text = "Level 1"

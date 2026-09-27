@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bug8ov45cbha5" path="res://scripts/game_over.gd" id="1_wqhvx"]
 [ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="2_tbwuq"]
+[ext_resource type="AudioStream" uid="uid://bhvxpl0v1jwog" path="res://assets/sounds/bs_shop_gameover.ogg" id="3_tbwuq"]
 
 [node name="Control" type="Control" unique_id=229386752]
 layout_mode = 3
@@ -63,5 +64,10 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_tbwuq")
 theme_override_font_sizes/font_size = 16
 text = "Main Menu"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=1843675457]
+stream = ExtResource("3_tbwuq")
+autoplay = true
+panning_strength = 0.0
 
 [connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
