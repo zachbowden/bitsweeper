@@ -16,6 +16,7 @@ func reset_run() -> void:
 	coins_gathered = 0
 	monsters_slain = 0
 	items_used = 0
+	level = 1
 	health = MAX_HEALTH
 	give_random_weapons()
 

@@ -2,7 +2,8 @@ extends CharacterBody2D
 
 const WEAPON_TILESET:TileSet = preload("res://assets/tileset/weapons.tres")
 const ARROW_SCRIPT:GDScript = preload("res://scripts/arrow.gd")
-const ARROW_TEXTURE:Texture2D = preload("res://icon.svg")
+const ARROW_TILESET:TileSet = preload("res://assets/tileset/general/arrow.tres")
+const ARROW_ATLAS_COORDS:Vector2i = Vector2i(9,7)
 const MAP_MUSIC:AudioStream = preload("res://assets/sounds/bs_map.ogg")
 const DEATH_SOUND:AudioStream = preload("res://assets/sounds/player_death.wav")
 ## Only used for its HIT_SOUNDS, which double as the player's hurt sounds.
@@ -288,12 +289,23 @@ func _melee(reach:float, arc:float) -> void:
 func _fire_arrow(max_distance:float) -> void:
 	var aim:Vector2 = _aim_direction()
 	var arrow = ARROW_SCRIPT.new()
-	arrow.texture = ARROW_TEXTURE # Placeholder until there's an arrow sprite.
+	arrow.texture = _arrow_texture()
 	arrow.z_index = 0
 	arrow.velocity = aim * arrow_speed
 	arrow.max_distance = max_distance
 	# Added to the level, not the player, so it doesn't move with the player.
 	get_parent().add_child(arrow)
 	arrow.global_position = %PLAYER.global_position
-	arrow.global_rotation = aim.angle()
-	arrow.global_scale = Vector2(0.06, 0.06)
+	# The arrow sprite points top-right, like the weapon sprites.
+	arrow.global_rotation = aim.angle() - SPRITE_ANGLE
+	arrow.global_scale = %PLAYER.global_scale
+
+var _arrow_atlas_texture:AtlasTexture
+
+func _arrow_texture() -> AtlasTexture:
+	if _arrow_atlas_texture == null:
+		var source:TileSetAtlasSource = ARROW_TILESET.get_source(ARROW_TILESET.get_source_id(0))
+		_arrow_atlas_texture = AtlasTexture.new()
+		_arrow_atlas_texture.atlas = source.texture
+		_arrow_atlas_texture.region = source.get_tile_texture_region(ARROW_ATLAS_COORDS)
+	return _arrow_atlas_texture
