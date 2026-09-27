@@ -1,0 +1,67 @@
+[gd_scene format=3 uid="uid://bbssbifei75gd"]
+
+[ext_resource type="Script" uid="uid://bug8ov45cbha5" path="res://scripts/game_over.gd" id="1_wqhvx"]
+[ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="2_tbwuq"]
+
+[node name="Control" type="Control" unique_id=229386752]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_wqhvx")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=56070025]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="CenterContainer" type="CenterContainer" parent="ColorRect" unique_id=683010182]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 480.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ColorRect/CenterContainer" unique_id=2033503402]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 2
+
+[node name="GameOverLabel" type="Label" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=295289415]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tbwuq")
+theme_override_font_sizes/font_size = 20
+text = "Game over!"
+horizontal_alignment = 1
+
+[node name="COINS_GATHERED" type="Label" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=990594175]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tbwuq")
+theme_override_font_sizes/font_size = 16
+text = "Coins gathered:"
+
+[node name="MONSTERS_KILLED" type="Label" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=1801956014]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tbwuq")
+theme_override_font_sizes/font_size = 16
+text = "Monsters slain:"
+
+[node name="ITEMS_USED" type="Label" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=608552573]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_tbwuq")
+theme_override_font_sizes/font_size = 16
+text = "Items used: "
+
+[node name="Button" type="Button" parent="ColorRect/CenterContainer/VBoxContainer" unique_id=1704078681]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_tbwuq")
+theme_override_font_sizes/font_size = 16
+text = "Main Menu"
+
+[connection signal="pressed" from="ColorRect/CenterContainer/VBoxContainer/Button" to="." method="_on_button_pressed"]
