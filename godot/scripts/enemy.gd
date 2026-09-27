@@ -6,30 +6,49 @@ extends Node2D
 ## The EnemyManager. Left untyped on purpose: the manager preloads this
 ## enemy's scene, so naming its class here would be a cyclic reference.
 var manager
+## Sub-cell the enemy is standing on (or leaving, while moving).
+var _cell:Vector2i
+## Sub-cell the enemy is walking into, while moving.
+var _next_cell:Vector2i
 var _target:Vector2
 var _moving:bool = false
+var _registered:bool = false
 
 func _physics_process(delta:float) -> void:
 	if manager == null:
 		manager = get_tree().get_first_node_in_group("enemy_manager")
-		if manager == null or manager.tiles == null:
-			return
-	# Walk tile centre to tile centre. The next tile is only chosen on arrival,
-	# so the enemy always finishes its current step before changing course.
+	if manager == null or manager.tiles == null:
+		return
+	if not _registered:
+		_cell = manager.to_sub_cell(global_position)
+		manager.claim(_cell, self)
+		_registered = true
+	# Walk sub-cell centre to sub-cell centre. The next sub-cell is only chosen
+	# on arrival, so the enemy always finishes its current step before turning.
 	var step:float = speed * delta
 	while step > 0.0:
 		if not _moving:
-			var cell:Vector2i = manager.to_cell(global_position)
-			var next:Vector2i = manager.next_step(cell)
-			if next == cell:
-				return # No path to the player, or already on their tile.
-			_target = manager.cell_to_world(next)
+			var next:Vector2i = manager.next_step(_cell, self)
+			if next == _cell:
+				return # No path, already there, or every useful sub-cell is taken.
+			# Hold both sub-cells until arrival so nobody walks into the one we're leaving.
+			manager.claim(next, self)
+			_next_cell = next
+			_target = manager.sub_cell_to_world(next)
 			_moving = true
 		var distance:float = global_position.distance_to(_target)
 		if distance <= step:
 			global_position = _target
 			step -= distance
+			manager.release(_cell, self)
+			_cell = _next_cell
 			_moving = false
 		else:
 			global_position = global_position.move_toward(_target, step)
 			step = 0.0
+
+func _exit_tree() -> void:
+	if _registered and is_instance_valid(manager):
+		manager.release(_cell, self)
+		if _moving:
+			manager.release(_next_cell, self)
