@@ -8,6 +8,8 @@ signal tiles_revealed(cells:Array[Vector2i])
 const TILE_SOURCE_ID:int = 0
 const FLAG_SOURCE_ID:int = 1
 const FLAG_ATLAS_COORDS:Vector2i = Vector2i(0,0)
+const DOOR_SOURCE_ID:int = 2
+const DOOR_ATLAS_COORDS:Vector2i = Vector2i(0,0)
 const HIDDEN:int = 0xA
 const MINESWEEPER_TILE_ATLAS:Dictionary = {
 	0:Vector2i(4,0),
@@ -35,8 +37,14 @@ const MAX_FLOOD_TILES:int = 20000
 
 ## Fraction of tiles that are mines (0.0 - 1.0).
 @export_range(0.0, 1.0, 0.01) var mine_density:float = 0.14
+## Chance for any non-mine tile to be a door (0.002 -> about 1 in 500 tiles).
+@export_range(0.0, 0.1, 0.0001) var door_chance:float = 0.0005
+## Scene loaded when the player walks onto a revealed door.
+@export_file("*.tscn", "*.scn") var door_scene:String
 
 var noise:FastNoiseLite = FastNoiseLite.new()
+## Separate noise for door placement, so doors don't correlate with mines.
+var door_noise:FastNoiseLite = FastNoiseLite.new()
 ## Every tile the player has revealed, mapped to its adjacent mine count.
 ## Hidden tiles are never stored; they are derived from the noise on demand.
 ## Tiles are erased from the TileMapLayer when off screen, so this is what
@@ -46,8 +54,10 @@ var revealed:Dictionary[Vector2i, int] = {}
 ## the flag is removed, and flood reveals stop at them.
 var flagged:Dictionary[Vector2i, bool] = {}
 var _drawn_rect:Rect2i = Rect2i()
-## Child layer that draws flags on top of the undiscovered tiles beneath them.
-var _flag_layer:TileMapLayer
+## Child layer that draws flags and doors on top of the tiles beneath them.
+var _overlay_layer:TileMapLayer
+var _player:Node2D
+var _leaving:bool = false
 
 func _enter_tree() -> void:
 	add_to_group("tile_gen")
@@ -60,12 +70,15 @@ func _ready() -> void:
 	noise.frequency = 1.0
 	noise.fractal_type = FastNoiseLite.FRACTAL_NONE
 	noise.seed = randi()
+	for setting in ["noise_type", "frequency", "fractal_type"]:
+		door_noise.set(setting, noise.get(setting))
+	door_noise.seed = randi()
 
-	# The flag layer only draws; collision comes from the hidden tile below it.
-	_flag_layer = TileMapLayer.new()
-	_flag_layer.tile_set = tile_set
-	_flag_layer.collision_enabled = false
-	add_child(_flag_layer)
+	# The overlay layer only draws; collision comes from the tile below it.
+	_overlay_layer = TileMapLayer.new()
+	_overlay_layer.tile_set = tile_set
+	_overlay_layer.collision_enabled = false
+	add_child(_overlay_layer)
 
 	clear()
 	for x in range(-SPAWN_SAFE_RADIUS, SPAWN_SAFE_RADIUS + 1):
@@ -75,6 +88,24 @@ func _ready() -> void:
 
 func _process(_delta:float) -> void:
 	_update_visible_tiles()
+	_check_door()
+
+## Loads door_scene once the player stands on a revealed door.
+func _check_door() -> void:
+	if _leaving:
+		return
+	if _player == null:
+		_player = get_tree().get_first_node_in_group("player")
+		if _player == null:
+			return
+	var cell:Vector2i = local_to_map(to_local(_player.global_position))
+	if not (revealed.has(cell) and is_door(cell)):
+		return
+	if door_scene.is_empty():
+		push_warning("Player reached a door, but door_scene isn't set.")
+		return
+	_leaving = true
+	get_tree().change_scene_to_file.call_deferred(door_scene)
 
 func _unhandled_input(event:InputEvent) -> void:
 	if not (event is InputEventMouseButton and event.pressed):
@@ -113,6 +144,16 @@ func is_mine(cell:Vector2i) -> bool:
 	# Map [-1, 1] to [0, 1] and compare against the density.
 	return (value + 1.0) * 0.5 < mine_density
 
+## Doors only appear on safe tiles outside the spawn area. Like mines, they
+## come from noise, so the same tiles are doors every time they're drawn.
+func is_door(cell:Vector2i) -> bool:
+	if absi(cell.x) <= SPAWN_SAFE_RADIUS and absi(cell.y) <= SPAWN_SAFE_RADIUS:
+		return false
+	if is_mine(cell):
+		return false
+	var value:float = door_noise.get_noise_3d(cell.x, cell.y, GLOBAL.level)
+	return (value + 1.0) * 0.5 < door_chance
+
 func count_adjacent_mines(cell:Vector2i) -> int:
 	var count:int = 0
 	for offset in NEIGHBOURS:
@@ -135,7 +176,7 @@ func reveal(start:Vector2i) -> void:
 		revealed[cell] = count
 		opened.append(cell)
 		if _drawn_rect.has_point(cell):
-			set_cell(cell, TILE_SOURCE_ID, MINESWEEPER_TILE_ATLAS[count])
+			_draw_cell(cell)
 		if count == 0:
 			for offset in NEIGHBOURS:
 				var next:Vector2i = cell + offset
@@ -147,9 +188,11 @@ func _draw_cell(cell:Vector2i) -> void:
 	var key:int = revealed.get(cell, HIDDEN)
 	set_cell(cell, TILE_SOURCE_ID, MINESWEEPER_TILE_ATLAS[key])
 	if flagged.has(cell):
-		_flag_layer.set_cell(cell, FLAG_SOURCE_ID, FLAG_ATLAS_COORDS)
+		_overlay_layer.set_cell(cell, FLAG_SOURCE_ID, FLAG_ATLAS_COORDS)
+	elif revealed.has(cell) and is_door(cell):
+		_overlay_layer.set_cell(cell, DOOR_SOURCE_ID, DOOR_ATLAS_COORDS)
 	else:
-		_flag_layer.erase_cell(cell)
+		_overlay_layer.erase_cell(cell)
 
 ## Only the tiles around the camera exist in the TileMapLayer; tiles that
 ## scroll off screen are erased and regenerated deterministically on return.
@@ -166,7 +209,7 @@ func _update_visible_tiles() -> void:
 			var cell:Vector2i = Vector2i(x, y)
 			if not new_rect.has_point(cell):
 				erase_cell(cell)
-				_flag_layer.erase_cell(cell)
+				_overlay_layer.erase_cell(cell)
 	for x in range(new_rect.position.x, new_rect.end.x):
 		for y in range(new_rect.position.y, new_rect.end.y):
 			var cell:Vector2i = Vector2i(x, y)
