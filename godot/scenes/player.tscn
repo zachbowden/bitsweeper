@@ -6,6 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://4abq0imt2m2p" path="res://assets/coin1_16x16.png" id="4_qlg0r"]
 [ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 [ext_resource type="Texture2D" uid="uid://baylmjq233cjk" path="res://assets/sprite_frames/player/portrait.png" id="6_tuyoq"]
+[ext_resource type="Texture2D" uid="uid://800aam54rthu" path="res://assets/tileset/general/heart.png" id="7_fjrip"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
 size = Vector2(119.999985, 119.999985)
@@ -68,3 +69,27 @@ z_index = 4
 position = Vector2(-1225.0002, 757.5001)
 scale = Vector2(15.35715, 15.131584)
 texture = ExtResource("6_tuyoq")
+
+[node name="Heart" type="Sprite2D" parent="." unique_id=957835317]
+z_index = 2
+position = Vector2(-660.0001, 920.0002)
+scale = Vector2(10, 10)
+texture = ExtResource("7_fjrip")
+
+[node name="Heart2" type="Sprite2D" parent="." unique_id=209901287]
+z_index = 2
+position = Vector2(-490.00012, 920.0002)
+scale = Vector2(10, 10)
+texture = ExtResource("7_fjrip")
+
+[node name="Heart3" type="Sprite2D" parent="." unique_id=2026306212]
+z_index = 2
+position = Vector2(-320.0001, 920.0002)
+scale = Vector2(10, 10)
+texture = ExtResource("7_fjrip")
+
+[node name="Heart4" type="Sprite2D" parent="." unique_id=232499234]
+z_index = 2
+position = Vector2(-140.00002, 920.0002)
+scale = Vector2(10, 10)
+texture = ExtResource("7_fjrip")
