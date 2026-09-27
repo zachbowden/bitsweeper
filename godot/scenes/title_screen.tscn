@@ -3,6 +3,7 @@
 [ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="1_s4lrb"]
 [ext_resource type="Script" uid="uid://cf2wnj1vev2xn" path="res://scripts/set_version.gd" id="2_mgrm8"]
 [ext_resource type="Script" uid="uid://srhgihum0q35" path="res://scripts/button_change_scene.gd" id="3_dc4i4"]
+[ext_resource type="AudioStream" uid="uid://bq3c6kic03guj" path="res://assets/sounds/bs_title.ogg" id="4_mgrm8"]
 
 [sub_resource type="GDScript" id="GDScript_mkqna"]
 script/source = "extends Control
@@ -79,3 +80,8 @@ theme_override_font_sizes/font_size = 20
 text = "Credits"
 script = ExtResource("3_dc4i4")
 new_scene = "uid://dtdaqgag4ni1w"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="." unique_id=934429806]
+stream = ExtResource("4_mgrm8")
+autoplay = true
+panning_strength = 0.0
