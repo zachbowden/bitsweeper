@@ -74,27 +74,31 @@ position = Vector2(-1225.0002, 757.5001)
 scale = Vector2(15.35715, 15.131584)
 texture = ExtResource("6_tuyoq")
 
-[node name="Heart" type="Sprite2D" parent="." unique_id=957835317]
+[node name="HEART_1" type="Sprite2D" parent="." unique_id=957835317]
+unique_name_in_owner = true
 z_index = 2
-position = Vector2(-660.0001, 920.0002)
+position = Vector2(-580.0001, 920.0001)
 scale = Vector2(10, 10)
 texture = ExtResource("7_fjrip")
 
-[node name="Heart2" type="Sprite2D" parent="." unique_id=209901287]
+[node name="HEART_2" type="Sprite2D" parent="." unique_id=209901287]
+unique_name_in_owner = true
 z_index = 2
-position = Vector2(-490.00012, 920.0002)
+position = Vector2(-410.00012, 920.0001)
 scale = Vector2(10, 10)
 texture = ExtResource("7_fjrip")
 
-[node name="Heart3" type="Sprite2D" parent="." unique_id=2026306212]
+[node name="HEART_3" type="Sprite2D" parent="." unique_id=2026306212]
+unique_name_in_owner = true
 z_index = 2
-position = Vector2(-320.0001, 920.0002)
+position = Vector2(-240.00009, 920.0001)
 scale = Vector2(10, 10)
 texture = ExtResource("7_fjrip")
 
-[node name="Heart4" type="Sprite2D" parent="." unique_id=232499234]
+[node name="HEART_4" type="Sprite2D" parent="." unique_id=232499234]
+unique_name_in_owner = true
 z_index = 2
-position = Vector2(-140.00002, 920.0002)
+position = Vector2(-60.000008, 920.0001)
 scale = Vector2(10, 10)
 texture = ExtResource("7_fjrip")
 

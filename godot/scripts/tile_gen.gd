@@ -107,7 +107,7 @@ func _check_door() -> void:
 		push_warning("Player reached a door, but door_scene isn't set.")
 		return
 	_leaving = true
-	GLOBAL.level+=1
+	GLOBAL.next_level()
 	get_tree().change_scene_to_file.call_deferred(door_scene)
 
 func _unhandled_input(event:InputEvent) -> void:

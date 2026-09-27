@@ -2,10 +2,15 @@ extends CharacterBody2D
 
 const WEAPON_TILESET:TileSet = preload("res://assets/tileset/weapons.tres")
 const ARROW_SCRIPT:GDScript = preload("res://scripts/arrow.gd")
-const ARROW_TEXTURE:Texture2D = preload("res://icon.svg")
+const ARROW_TILESET:TileSet = preload("res://assets/tileset/general/arrow.tres")
+const ARROW_ATLAS_COORDS:Vector2i = Vector2i(9,7)
 const MAP_MUSIC:AudioStream = preload("res://assets/sounds/bs_map.ogg")
 const DEATH_SOUND:AudioStream = preload("res://assets/sounds/player_death.wav")
+## Only used for its HIT_SOUNDS, which double as the player's hurt sounds.
+const ENEMY_SCRIPT:GDScript = preload("res://scripts/enemy.gd")
 const GAME_OVER_SCENE:String = "res://scenes/game_over.tscn"
+const HEART_TEXTURE:Texture2D = preload("res://assets/tileset/general/heart.png")
+const EMPTY_HEART_TEXTURE:Texture2D = preload("res://assets/tileset/general/empty_heart.png")
 ## Slot 3 is never stored in GLOBAL.inventory; it's always an unbreakable dagger.
 const DAGGER_SLOT:int = 3
 ## Weapon sprites point to the top right of their tile, i.e. at -45 degrees.
@@ -28,9 +33,16 @@ const WEAPONS:Dictionary = {
 ## How much bigger the selected slot's sprite is drawn.
 @export var selected_slot_scale:float = 1.25
 @export var arrow_speed:float = 250.0
+## Enemies within this many map tiles of the player hurt them. Keep it above
+## the enemy manager's player_clearance (0.5) so enemies can reach this range.
+@export var enemy_hit_range:float = 0.75
+## Seconds the player can't be hurt again after taking damage.
+@export var invulnerability_time:float = 1.0
 
 var sprite:AnimatedSprite2D
 var _dead:bool = false
+var _invulnerable_for:float = 0.0
+var _tiles:TileMapLayer
 var selected_slot:int = DAGGER_SLOT
 var _attack_cooldown:float = 0.0
 ## Extra rotation added to the held weapon while swinging.
@@ -57,10 +69,11 @@ func _ready() -> void:
 	selected_slot = 1 if GLOBAL.inventory.has(1) else DAGGER_SLOT
 	_update_inventory_display()
 	%LEVEL.text = "Level %d" % GLOBAL.level
+	_update_hearts()
 	# Clicking a mine kills the player.
-	var tiles:Node = get_tree().get_first_node_in_group("tile_gen")
-	if tiles != null:
-		tiles.mine_triggered.connect(func(_cell:Vector2i) -> void: die())
+	_tiles = get_tree().get_first_node_in_group("tile_gen")
+	if _tiles != null:
+		_tiles.mine_triggered.connect(func(_cell:Vector2i) -> void: die())
 	var _audioplayer = AudioStreamPlayer2D.new()
 	_audioplayer.stream = MAP_MUSIC
 	_audioplayer.panning_strength = 0
@@ -86,6 +99,7 @@ func _physics_process(delta:float) -> void:
 	if Input.is_physical_key_pressed(KEY_SPACE) and _attack_cooldown <= 0.0:
 		_attack()
 	_update_held_weapon()
+	_check_enemy_contact(delta)
 
 ## Picks the animation from the input direction. Diagonals use the side
 ## animation. walk_right faces right, so it's mirrored for moving left.
@@ -117,6 +131,38 @@ func _move_along_axis(motion:Vector2) -> void:
 
 func update_coins() -> void:
 	$coinCount.text=str(GLOBAL.coins_gathered)
+# --- Health ------------------------------------------------------------------
+
+func _update_hearts() -> void:
+	for i in range(1, GLOBAL.MAX_HEALTH + 1):
+		get_node("%%HEART_%d" % i).texture = HEART_TEXTURE if i <= GLOBAL.health else EMPTY_HEART_TEXTURE
+
+## Takes damage from any enemy close enough, then blinks while invulnerable.
+func _check_enemy_contact(delta:float) -> void:
+	if _invulnerable_for > 0.0:
+		_invulnerable_for -= delta
+		# Blink every 0.1s, and end fully visible.
+		%PLAYER.modulate.a = 0.4 if _invulnerable_for > 0.0 and fmod(_invulnerable_for, 0.2) > 0.1 else 1.0
+		return
+	if _tiles == null:
+		return
+	var reach:float = enemy_hit_range * _tiles.tile_set.tile_size.x
+	for enemy in get_tree().get_nodes_in_group("enemies"):
+		if enemy.global_position.distance_to(%PLAYER.global_position) <= reach:
+			take_damage(1)
+			return
+
+func take_damage(amount:int) -> void:
+	if _dead or _invulnerable_for > 0.0:
+		return
+	GLOBAL.health = maxi(GLOBAL.health - amount, 0)
+	_update_hearts()
+	GLOBAL.play_sound(ENEMY_SCRIPT.HIT_SOUNDS.pick_random())
+	if GLOBAL.health == 0:
+		die()
+	else:
+		_invulnerable_for = invulnerability_time
+
 ## Plays the death sound and goes to the game over screen. The sound is
 ## played through GLOBAL, so it carries on over the scene change.
 func die() -> void:
@@ -243,12 +289,23 @@ func _melee(reach:float, arc:float) -> void:
 func _fire_arrow(max_distance:float) -> void:
 	var aim:Vector2 = _aim_direction()
 	var arrow = ARROW_SCRIPT.new()
-	arrow.texture = ARROW_TEXTURE # Placeholder until there's an arrow sprite.
-	arrow.z_index = 1
+	arrow.texture = _arrow_texture()
+	arrow.z_index = 0
 	arrow.velocity = aim * arrow_speed
 	arrow.max_distance = max_distance
 	# Added to the level, not the player, so it doesn't move with the player.
 	get_parent().add_child(arrow)
 	arrow.global_position = %PLAYER.global_position
-	arrow.global_rotation = aim.angle()
-	arrow.global_scale = Vector2(0.06, 0.06)
+	# The arrow sprite points top-right, like the weapon sprites.
+	arrow.global_rotation = aim.angle() - SPRITE_ANGLE
+	arrow.global_scale = %PLAYER.global_scale
+
+var _arrow_atlas_texture:AtlasTexture
+
+func _arrow_texture() -> AtlasTexture:
+	if _arrow_atlas_texture == null:
+		var source:TileSetAtlasSource = ARROW_TILESET.get_source(ARROW_TILESET.get_source_id(0))
+		_arrow_atlas_texture = AtlasTexture.new()
+		_arrow_atlas_texture.atlas = source.texture
+		_arrow_atlas_texture.region = source.get_tile_texture_region(ARROW_ATLAS_COORDS)
+	return _arrow_atlas_texture
