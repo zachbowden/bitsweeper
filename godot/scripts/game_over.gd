@@ -13,4 +13,4 @@ func _ready() -> void:
 		"Items used: %d" % GLOBAL.items_used
 
 func _on_button_pressed() -> void:
-	get_tree().change_scene_to_file("res://scenes/title_screen.scn")
+	get_tree().change_scene_to_file("res://scenes/title_screen.tscn")

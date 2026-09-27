@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Bitsweeper"
 config/version="v1.0.0"
-run/main_scene="uid://dhdijcy7x7n2w"
+run/main_scene="uid://dul40gfgam2cx"
 run/print_header=false
 config/features=PackedStringArray("4.7", "Forward Plus")
 boot_splash/bg_color=Color(0, 0, 0, 1)

@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://d0u1dl17a4e4t"]
+
+[ext_resource type="TileSet" uid="uid://gs5acyuqt7i1" path="res://assets/tileset/level_1/grid.res" id="1_4nkto"]
+[ext_resource type="Script" uid="uid://bk1qvf3t4ut68" path="res://scripts/tile_gen.gd" id="2_fcfvj"]
+[ext_resource type="Script" uid="uid://cn6stp1lsexg1" path="res://scripts/player.gd" id="3_pa8r4"]
+[ext_resource type="SpriteFrames" uid="uid://bmh0mqw5rgfhq" path="res://assets/sprite_frames/player/player.tres" id="4_15mv3"]
+[ext_resource type="Script" uid="uid://clnvt0l7c2qyw" path="res://scripts/enemy_manager.gd" id="5_e3sih"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
+size = Vector2(119.999985, 119.999985)
+
+[node name="Level1" type="Node2D" unique_id=84856214]
+
+[node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=1574418395]
+tile_set = ExtResource("1_4nkto")
+script = ExtResource("2_fcfvj")
+
+[node name="CharacterBody2D" type="CharacterBody2D" parent="." unique_id=106164499]
+scale = Vector2(0.09999999, 0.09999999)
+script = ExtResource("3_pa8r4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CharacterBody2D" unique_id=1515933719]
+position = Vector2(-1.1920931e-06, 1.1920931e-06)
+scale = Vector2(1.0000002, 1.0000002)
+shape = SubResource("RectangleShape2D_uurhq")
+
+[node name="PLAYER" type="AnimatedSprite2D" parent="CharacterBody2D" unique_id=858768098]
+unique_name_in_owner = true
+scale = Vector2(9, 9)
+sprite_frames = ExtResource("4_15mv3")
+animation = &"walk_down"
+frame_progress = 0.48929286
+
+[node name="Camera2D" type="Camera2D" parent="CharacterBody2D" unique_id=2127847519]
+scale = Vector2(10.000002, 10.000002)
+zoom = Vector2(2, 2)
+
+[node name="enemy_manager" type="Node" parent="." unique_id=1580881046]
+script = ExtResource("5_e3sih")
