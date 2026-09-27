@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://cn6stp1lsexg1" path="res://scripts/player.gd" id="1_g2els"]
 [ext_resource type="SpriteFrames" uid="uid://bmh0mqw5rgfhq" path="res://assets/sprite_frames/player/player.tres" id="2_qhqgy"]
 [ext_resource type="TileSet" uid="uid://6yev4dnbw5to" path="res://assets/tileset/general/frame.tres" id="3_qhqgy"]
+[ext_resource type="Texture2D" uid="uid://bg33jbvjakbgk" path="res://icon.svg" id="4_qlg0r"]
+[ext_resource type="FontFile" uid="uid://b8m1658menmhl" path="res://assets/fonts/Mister Pixel Regular.otf" id="5_tuyoq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uurhq"]
 size = Vector2(119.999985, 119.999985)
@@ -24,11 +26,12 @@ sprite_frames = ExtResource("2_qhqgy")
 animation = &"walk_down"
 frame_progress = 0.48929286
 
+[node name="WEAPON" type="Sprite2D" parent="PLAYER" unique_id=80248004]
+unique_name_in_owner = true
+scale = Vector2(0.11111111, 0.11111111)
+
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1178061732]
 zoom = Vector2(2, 2)
-
-[node name="WEAPON" type="Sprite2D" parent="." unique_id=80248004]
-unique_name_in_owner = true
 
 [node name="frame" type="TileMapLayer" parent="." unique_id=2015913525]
 position = Vector2(20, -20)
@@ -41,3 +44,39 @@ position = Vector2(-10, 0)
 scale = Vector2(15, 15)
 tile_map_data = PackedByteArray("AADw/+z/AwAJAAAAAADw/+3/AwAJAAEAAADw/+7/AwAJAAIAAADw/+//AwAJAAMAAADw//D/AwAJAAQAAADw//H/AwAJAAUAAADw//L/AwAJAAYAAADw//P/AwAJAAcAAADw//T/AwAJAAgAAADw//X/AwAJAAkAAADw//b/AwAJAAoAAADw//f/AwAJAAsAAADw//j/AwAJAAwAAADw//n/AwAJAA0AAADw//r/AwAJAA4AAADw//v/AwAJAA8AAADw//z/AwAJABAAAADw//3/AwAJABEAAADw//7/AwAJABIAAADw////AwAJABMAAADw/wAAAwAJABQAAADw/wEAAwAJABUAAADw/wIAAwAJABYAAADw/wMAAwAJABcAAADw/wQAAwAJABgAAADw/wUAAwAJABkAAADw/wYAAwAJABoAAADw/wcAAwAJABsAAADw/wgAAwAJABwAAADw/wkAAwAJAB0AAADw/woAAwAJAB4AAADx/woAAwAKAB4AAADy/woAAwALAB4AAADz/woAAwAMAB4AAAD0/woAAwANAB4AAAD1/woAAwAOAB4AAAD2/woAAwAPAB4AAAD3/woAAwAQAB4AAAD4/woAAwARAB4AAAD5/woAAwASAB4AAAD6/woAAwATAB4AAAD7/woAAwAUAB4AAAD8/woAAwAVAB4AAAD9/woAAwAWAB4AAAD+/woAAwAXAB4AAAD//woAAwAYAB4AAAAAAAoAAwAZAB4AAAABAAoAAwAaAB4AAAACAAoAAwAbAB4AAAADAAoAAwAcAB4AAAAEAAoAAwAdAB4AAAAFAAoAAwAeAB4AAAAGAAoAAwAfAB4AAAAHAAoAAwAgAB4AAAAIAAoAAwAhAB4AAAAJAAoAAwAiAB4AAAAKAAoAAwAjAB4AAAALAAoAAwAkAB4AAAAMAAoAAwAlAB4AAAANAAoAAwAmAB4AAAAOAAoAAwAnAB4AAAAPAOz/AwAoAAAAAAAPAO3/AwAoAAEAAAAPAO7/AwAoAAIAAAAPAO//AwAoAAMAAAAPAPD/AwAoAAQAAAAPAPH/AwAoAAUAAAAPAPL/AwAoAAYAAAAPAPP/AwAoAAcAAAAPAPT/AwAoAAgAAAAPAPX/AwAoAAkAAAAPAPb/AwAoAAoAAAAPAPf/AwAoAAsAAAAPAPj/AwAoAAwAAAAPAPn/AwAoAA0AAAAPAPr/AwAoAA4AAAAPAPv/AwAoAA8AAAAPAPz/AwAoABAAAAAPAP3/AwAoABEAAAAPAP7/AwAoABIAAAAPAP//AwAoABMAAAAPAAAAAwAoABQAAAAPAAEAAwAoABUAAAAPAAIAAwAoABYAAAAPAAMAAwAoABcAAAAPAAQAAwAoABgAAAAPAAUAAwAoABkAAAAPAAYAAwAoABoAAAAPAAcAAwAoABsAAAAPAAgAAwAoABwAAAAPAAkAAwAoAB0AAAAPAAoAAwAoAB4AAAA=")
 tile_set = ExtResource("3_qhqgy")
+
+[node name="EQUIPT" type="Sprite2D" parent="." unique_id=1938098159]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(400.00006, 910.0001)
+texture = ExtResource("4_qlg0r")
+
+[node name="SLOT_1" type="Sprite2D" parent="." unique_id=1593286209]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(1210.0002, 420.00006)
+texture = ExtResource("4_qlg0r")
+
+[node name="SLOT_2" type="Sprite2D" parent="." unique_id=870229524]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(1210.0002, 660.0001)
+texture = ExtResource("4_qlg0r")
+
+[node name="SLOT_3" type="Sprite2D" parent="." unique_id=810603234]
+unique_name_in_owner = true
+z_index = 1
+position = Vector2(1210.0001, 900.0002)
+texture = ExtResource("4_qlg0r")
+
+[node name="DURABILITY" type="Label" parent="." unique_id=382540381]
+unique_name_in_owner = true
+z_index = 1
+offset_left = 520.00006
+offset_top = 860.0001
+offset_right = 746.00006
+offset_bottom = 964.0001
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("5_tuyoq")
+theme_override_font_sizes/font_size = 103
+text = "x100	"

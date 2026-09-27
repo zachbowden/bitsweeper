@@ -15,6 +15,15 @@ var _moving:bool = false
 var _registered:bool = false
 @onready var sprite:AnimatedSprite2D = find_children("*", "AnimatedSprite2D", false)[0]
 
+func _enter_tree() -> void:
+	add_to_group("enemies")
+
+func die() -> void:
+	if is_queued_for_deletion():
+		return # Already killed this frame (e.g. by two hits at once).
+	GLOBAL.monsters_slain += 1
+	queue_free()
+
 func _physics_process(delta:float) -> void:
 	if manager == null:
 		manager = get_tree().get_first_node_in_group("enemy_manager")

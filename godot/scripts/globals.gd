@@ -5,8 +5,12 @@ var monsters_slain:int = 0
 var items_used:int = 0
 var difficulty:int = 1
 var level:int = 1
+var inventory:Dictionary = {1:{"name":"mace","durability":10}}
 
 func reset_run() -> void:
 	coins_gathered = 0
 	monsters_slain = 0
 	items_used = 0
+	inventory = {
+		1:{"name":"crossbow","durability":100}
+	}
